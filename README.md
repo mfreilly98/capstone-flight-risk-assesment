@@ -1,3 +1,7 @@
+# Code Milestone 1
+
+For code milestone one, we worked on creating the basic web application with a connection from the front end to the back end. The goal of our web application is to have a page for the students to fill out a flight risk assesment form that includes information about NOTAMS and METAR data. We also plan on including a page where professors can go in, she what the students have entered along with change settings. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
