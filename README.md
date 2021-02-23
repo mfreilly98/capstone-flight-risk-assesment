@@ -5,12 +5,12 @@ For code milestone one, we have a basic web application with a front end coded w
 To run the application use command lines: \
 npm install \
 npm I react-bootstrap \
-npm start \
+npm start 
 
 Code for our project is currently in three branches: \
 milestone_1_simonini \
 Admin_Panel \
-backend1 \
+backend1 
 
-we intend to combine the code into 1 to 2 repositories soon. \
+we intend to combine the code into 1 to 2 repositories soon. 
 
