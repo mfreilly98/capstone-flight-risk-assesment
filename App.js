@@ -1,70 +1,116 @@
+import LoginForm from './LoginForm';
+import SubmitButton from './SubmitButton';
+import React from 'react';
+import UserStore from './stores/UserStore';
 import './App.css';
-import { EasybaseProvider, useEasybase } from 'easybase-react';
-import { useEffect } from 'react';
-import ebconfig from './ebconfig';
+import {observer} from 'mobx-react';
 
-function App() {
-  return (
-    <div className="App" style={{ display: "flex", justifyContent: "center" }}>
-      <EasybaseProvider ebconfig={ebconfig}>
-        <Notes />
-        <NewNoteButton />
-      </EasybaseProvider>
-    </div>
-  );
+class App extends React.Component{
+	
+	async componentDidMount() {
+		
+		try{
+			let res = await fetch('/isLoggedIn', {
+				method: 'post',
+				headers: {
+					'Accept' : 'application/json',
+					'Content-Type': 'application/json'
+				}
+			});
+			let result = await res.json();
+			
+			if (result && result.success) {
+				UserStore.loading = false;
+				UserStore.isLoggedIn = true;
+				UserStore.isLoggedIn = result.username;
+			}
+			else{
+				UserStore.loading = false;
+				UserStore.isLoggedIn = false;
+			}
+		}
+		
+		catch(e) {
+			UserStore.loading = false;
+			UserStore.isLoggedIn = false;
+			
+		}
+	}
+	
+	async doLogout() {
+
+
+
+
+
+	try{
+			
+			let res = await fetch('/logout', {
+				method: 'post',
+				headers: {
+					'Accept' : 'application/json',
+					'Content-Type': 'application/json'
+				}
+			});
+			let result = await res.json();
+			
+			if (result && result.success) {
+				UserStore.isLoggedIn = false;
+				UserStore.username = '';
+
+			}
+			
+		}
+		
+		catch(e) {
+			console.log(e)
+			
+		}
+	}
+	
+  render() {
+	  
+	  if(UserStore.loading){
+		  return(
+			<div className="app">
+				<div className = 'container'>
+					Loading, please wait...
+				</div>
+			</div>
+			);
+	  }  
+			
+			else{
+				
+				if(UserStore.isLoggedIn){
+					return(
+						<div className="app">
+						<div className = 'container'>
+							Welcome {UserStore.username}
+							
+							<SubmitButton
+								text={'Log out'}
+								disabled={false}
+								onClick={ () => this.doLogout() }
+								
+							/>
+							
+						</div>
+						</div>
+			);
+				}
+			return (
+				<div className="app">
+					<div className= 'container'>	
+						
+					<LoginForm />
+					</div>
+				</div>
+			  );
+			}
+		
+	  }
+
 }
 
-function Notes() {
-  const { Frame, sync, configureFrame } = useEasybase();
-
-  useEffect(() => {
-    configureFrame({ tableName: "NOTES APP", limit: 10 });
-    sync();
-  }, []);
-
-  const noteRootStyle = {
-    border: "2px #0af solid",
-    borderRadius: 9,
-    margin: 20,
-    backgroundColor: "#efefef",
-    padding: 6
-  };
-
-  return (
-    <div style={{ width: 400 }}>
-      {Frame().map(ele => 
-        <div style={noteRootStyle}>
-          <h3>{ele.username}</h3>
-          <p>{ele.password}</p>
-        </div>
-      )}
-    </div>
-  )
-}
-
-
-export default App;
-function NewNoteButton() {
-  const { Frame, sync } = useEasybase();
-
-  const buttonStyle = {
-    position: "absolute",
-    left: 10,
-    top: 10,
-    fontSize: 21
-  }
-
-  const handleClick = () => {
-    const NewUsername = prompt("Username:");
-    const newPassword = prompt("Password:");
-    
-    Frame().push({
-      username: NewUsername,
-      password: newPassword,
-    })
-    
-    sync();
-  }
-
-  return <button style={buttonStyle} onClick={handleClick}>📓 Add Note 📓</button>
-}
+export default observer(App);

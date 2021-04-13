@@ -1,42 +1,17 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
-export default function Home() {
-	
-  return (
-  
-    <Layout home>
-	
-	<Head>
-	<title>{siteTitle}</title>
-	</Head>
-
-	<section className={utilStyles.headingMd}>
-	
-
-<form method="post" action= "login">
-  <label>
-  Username:
-  <br />
-    <input type="text" name="username" />
-  </label>
-  <br />
-  <label>
-  Password:
-  </label>
-  <br />
-  <input type="password" name="password" />
-  <br />
-  <input type="submit" value="Login" />
-</form>
-
-<p>
-	{' '}
-<a href="https://github.com/mfreilly98/capstone-flight-risk-assesment/tree/master">Back to Homepage</a>
-</p>
-</section>
-</Layout>
-)
-}
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
